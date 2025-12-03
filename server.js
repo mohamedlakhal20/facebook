@@ -1,15 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
+app.post("/save", (req, res) => {
+  const { username, message } = req.body;
 
-  console.log("Form submitted:", username, password);
+  const line = `Name: ${username} | Message: ${message}\n`;
 
-  res.send("تم استقبال البيانات (تعليم فقط).");
+  fs.appendFileSync("data.txt", line, "utf8");
+
+  res.send("تم حفظ البيانات بنجاح (تعليمي فقط).");
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.listen(process.env.PORT || 3000, () =>
+  console.log("Server running")
+);
